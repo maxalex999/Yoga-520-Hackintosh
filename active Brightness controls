@@ -1,0 +1,58 @@
+
+By replacing these lines within the dsdt you will activate the brightness button via the keyboard instead of just the panel
+
+
+Replace the following lines:
+
+            Method (_Q11, 0, NotSerialized)  // _Qxx: EC Query
+            {
+                If (IGDS)
+                {
+                    Store (^^^IGPU.CBLV, Local0)
+                    If (LEqual (And (Local0, 0x7F), One))
+                    {
+                        Store (One, BLLV)
+                    }
+                    Else
+                    {
+                        Store (Zero, BLLV)
+                    }
+
+                    Notify (^^^IGPU.DD1F, 0x87)
+                }
+                Else
+                {
+                }
+
+                Notify (VPC0, 0x80)
+            }
+
+            Method (_Q12, 0, NotSerialized)  // _Qxx: EC Query
+            {
+                If (IGDS)
+                {
+                    Store (Zero, BLLV)
+                    Notify (^^^IGPU.DD1F, 0x86)
+                }
+                Else
+                {
+                }
+
+                Notify (VPC0, 0x80)
+            }
+            
+            
+            
+            
+For these:
+
+
+            Method (_Q11, 0, NotSerialized)  // _Qxx: EC Query
+            {
+                Notify (PS2K, 0x0405)
+            }
+
+            Method (_Q12, 0, NotSerialized)  // _Qxx: EC Query
+            {
+                Notify (PS2K, 0x0406)
+            }
